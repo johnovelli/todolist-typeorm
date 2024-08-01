@@ -5,7 +5,8 @@ import { CreateTodoTypeException } from "../exception/create-todo-null.exception
 export class TodolistValidate {
 
     static validateCreateTodo(task: string, isHighPriority: boolean) {
+        if (!task || !isHighPriority) throw new CreateTodoNullException();
         if (typeof task !== 'string' || typeof isHighPriority !== 'boolean') throw new CreateTodoTypeException();
-        if (!task || !isHighPriority || !task.trim()) throw new CreateTodoNullException();
+        if (!task.trim()) throw new CreateTodoNullException();
     }
 }
