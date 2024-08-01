@@ -1,5 +1,5 @@
 import { CreateTodoNullException } from "../exception/create-todo-null.exception";
-import { CreateTodoTypeException } from "../exception/create-todo-null.exception copy";
+import { CreateTodoTypeException } from "../exception/create-todo-type.exception";
 
 
 export class TodoValidate {
