@@ -1,21 +1,21 @@
 import { Request, Response } from "express";
-import { Todolist } from "../entity/todolist.entity";
+import { Todo } from "../entity/todo.entity";
 import { GlobalExceptionHandler } from "../exception/global-exception.handler";
 import { CreateTodoRequest } from "../interface/create-todo.interface";
-import { TodolistService } from "../service/todolist.service";
-import { TodolistValidate } from "../validate/todolist.validate";
+import { TodoService } from "../service/todo.service";
+import { TodoValidate } from "../validate/todo.validate";
 import { TodoCreateDto } from "./dto/todo-create.dto";
 import { TodoDto } from "./dto/todo.dto";
 
-export class TodolistController {
-    private _todolistService: TodolistService
+export class TodoController {
+    private _todoService: TodoService
     constructor() {
-        this._todolistService = new TodolistService();
+        this._todoService = new TodoService();
     }
 
     async getAll(_req: Request, res: Response): Promise<void> {
         try {
-            const todolist: Todolist[] = await this._todolistService.getAll();
+            const todolist: Todo[] = await this._todoService.getAll();
             res.status(200).json(todolist.map((todo) => TodoDto.fromEntity(todo)));
         } catch (error) {
             GlobalExceptionHandler.handleException(error as Error, res)
@@ -25,11 +25,11 @@ export class TodolistController {
     async createTodo(req: Request, res: Response): Promise<void> {
         const { task, isHighPriority }: CreateTodoRequest = req.body;
         try {
-            TodolistValidate.validateCreateTodo(task, isHighPriority);
+            TodoValidate.validateCreateTodo(task, isHighPriority);
             const todo = TodoCreateDto.toEntity(
                 new TodoCreateDto(task, isHighPriority)
             );
-            const savedTodo = await this._todolistService.createTodo(todo);
+            const savedTodo = await this._todoService.createTodo(todo);
             res.status(201).json(TodoDto.fromEntity(savedTodo));
         } catch (error) {
             GlobalExceptionHandler.handleException(error as Error, res)

@@ -1,7 +1,7 @@
 import express from 'express';
 import 'reflect-metadata';
-import { TodolistController } from './controller/todolist.controller';
-const todolistController = new TodolistController();
+import { TodoController } from './controller/todo.controller';
+const todoController = new TodoController();
 
 const app = express();
 
@@ -11,9 +11,9 @@ app.get('/', (req, res) => {
   res.send('Hello World');
 });
 
-app.get('/todolist', (_req, res) => todolistController.getAll(_req, res));
+app.get('/todolist', (_req, res) => todoController.getAll(_req, res));
 
-app.post('/todolist', (req, res) => todolistController.createTodo(req, res));
+app.post('/todolist', (req, res) => todoController.createTodo(req, res));
 
 
 

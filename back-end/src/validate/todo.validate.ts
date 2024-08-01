@@ -2,7 +2,7 @@ import { CreateTodoNullException } from "../exception/create-todo-null.exception
 import { CreateTodoTypeException } from "../exception/create-todo-null.exception copy";
 
 
-export class TodolistValidate {
+export class TodoValidate {
 
     static validateCreateTodo(task: string, isHighPriority: boolean) {
         if (!task || !isHighPriority) throw new CreateTodoNullException();

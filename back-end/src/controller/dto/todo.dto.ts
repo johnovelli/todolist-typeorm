@@ -1,4 +1,4 @@
-import { Todolist } from "../../entity/todolist.entity";
+import { Todo } from "../../entity/todo.entity";
 
 export class TodoDto {
     task: string;
@@ -17,7 +17,7 @@ export class TodoDto {
         this.updatedAt = updatedAt;
     }
 
-    static fromEntity(todolist: Todolist): TodoDto {
+    static fromEntity(todolist: Todo): TodoDto {
         return new TodoDto (
             todolist.task,
             todolist.isHighPriority,

@@ -1,4 +1,4 @@
-import { Todolist } from "../../entity/todolist.entity";
+import { Todo } from "../../entity/todo.entity";
 
 export class TodoCreateDto {
     task: string;
@@ -9,9 +9,9 @@ export class TodoCreateDto {
         this.isHighPriority = isHighPriority;
     }
 
-    static toEntity(todoCreateDto: TodoCreateDto): Todolist {
+    static toEntity(todoCreateDto: TodoCreateDto): Todo {
         const {task, isHighPriority} = todoCreateDto;
-        const todo = new Todolist(task, isHighPriority)
+        const todo = new Todo(task, isHighPriority)
         return todo;
     }
 }
