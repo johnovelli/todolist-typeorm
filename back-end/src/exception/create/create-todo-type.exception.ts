@@ -1,4 +1,4 @@
-import { GlobalExceptionHandler } from "./global-exception.handler";
+import { GlobalExceptionHandler } from "../global-exception.handler";
 
 export class CreateTodoTypeException extends GlobalExceptionHandler {
     constructor() {

@@ -1,7 +1,7 @@
 import { AppDataSource } from "../config/ormconfig";
 import { TodoCreateDto } from "../controller/dto/todo-create.dto";
 import { Todo } from "../entity/todo.entity";
-import { TodoNotFoundException } from "../exception/todo-not-found.exception";
+import { TodoNotFoundException } from "../exception/find/todo-not-found.exception";
 import { TodoRepository } from "../repository/todo.repository";
 import { TodoValidate } from "../validate/todo.validate";
 
@@ -17,11 +17,26 @@ export class TodoService {
         const todolist: Todo[] = await this._todoRepository.find({
             order : {
                 isHighPriority: 'DESC',
-                createdAt: 'DESC'
+                updatedAt: 'DESC',
+                createdAt: 'DESC',
             }
         });
-        TodoValidate.validateGetAllTodos(todolist)
+        TodoValidate.validateGetAllTodos(todolist);
         return todolist;
+    }
+
+    async getAllFilteredTodos (filter: Partial<Todo>): Promise<Todo[]> {
+        const filterParams = TodoValidate.validateGetFilteredTodos(filter);
+        const filteredTodos: Todo[] = await this._todoRepository.find({
+            where: {
+                [filterParams.filterField]: filterParams.fieldValue,
+            },
+            order: {
+                updatedAt: 'DESC',
+                createdAt: 'DESC',
+            }
+        });
+        return filteredTodos;
     }
 
     async createTodo(task: string, isHighPriority: boolean): Promise<Todo> {
@@ -42,10 +57,16 @@ export class TodoService {
     }
 
     async updateTodo(id: number, update: Partial<Todo>): Promise<Todo> {
-        TodoValidate.validadeUpdateTodo(update)
-        const todo = await this.findTodoById(id);
-        Object.assign(todo, update);
-        return await this._todoRepository.save(todo);
+        TodoValidate.validadeUpdateTodo(update);
+        const todoToUpdate = await this.findTodoById(id);
+        Object.assign(todoToUpdate, update);
+        return await this._todoRepository.save(todoToUpdate);
+    }
+
+    async deleteTodo(id: number): Promise<string> {
+        const todoToDelete = await this.findTodoById(id);
+        await this._todoRepository.delete(id);
+        return `Task: ${todoToDelete.task} removed from db.`;
     }
 }
 

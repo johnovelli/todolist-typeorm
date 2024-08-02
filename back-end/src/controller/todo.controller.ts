@@ -10,9 +10,17 @@ export class TodoController {
     private _todoService: TodoService
     constructor() { this._todoService = new TodoService(); }
 
-    async getAll(_req: Request, res: Response): Promise<void> {
+    async getAllTodos(_req: Request, res: Response): Promise<void> {
         try {
             const todolist: Todo[] = await this._todoService.getAllTodos();
+            res.status(200).json(todolist.map((todo) => TodoDto.fromEntity(todo)));
+        } catch (error) { GlobalExceptionHandler.handleException(error as Error, res) }
+    }
+
+    async getAllFilteredTodos(req: Request, res: Response): Promise<void> {
+        try {
+            const filter: Partial<Todo> = req.body
+            const todolist: Todo[] = await this._todoService.getAllFilteredTodos(filter);
             res.status(200).json(todolist.map((todo) => TodoDto.fromEntity(todo)));
         } catch (error) { GlobalExceptionHandler.handleException(error as Error, res) }
     }
@@ -41,6 +49,15 @@ export class TodoController {
             const update: Partial<Todo> = req.body
             const updatedTodo: Todo = await this._todoService.updateTodo(id, update);
             res.status(200).json(TodoDto.fromEntity(updatedTodo));
+        } 
+        catch(error) { GlobalExceptionHandler.handleException(error as Error, res); }
+    }
+
+    async deleteTodo(req: Request, res: Response) {
+        try {
+            const id: number = parseInt(req.params.id);
+            const deletedTodo: string = await this._todoService.deleteTodo(id);
+            res.status(200).json({message: deletedTodo});
         } 
         catch(error) { GlobalExceptionHandler.handleException(error as Error, res); }
     }
