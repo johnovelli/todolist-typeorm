@@ -15,6 +15,6 @@ app.get('/todolist', (_req, res) => todoController.getAll(_req, res));
 
 app.post('/todolist', (req, res) => todoController.createTodo(req, res));
 
-
+app.get('/todolist/:id', (req, res) => todoController.findTodoById(req, res));
 
 export default app;
