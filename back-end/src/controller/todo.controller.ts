@@ -8,18 +8,13 @@ import { TodoDto } from "./dto/todo.dto";
 
 export class TodoController {
     private _todoService: TodoService
-
-    constructor() {
-        this._todoService = new TodoService();
-    }
+    constructor() { this._todoService = new TodoService(); }
 
     async getAll(_req: Request, res: Response): Promise<void> {
         try {
-            const todolist: Todo[] = await this._todoService.getAll();
+            const todolist: Todo[] = await this._todoService.getAllTodos();
             res.status(200).json(todolist.map((todo) => TodoDto.fromEntity(todo)));
-        } catch (error) {
-            GlobalExceptionHandler.handleException(error as Error, res)
-        }
+        } catch (error) { GlobalExceptionHandler.handleException(error as Error, res) }
     }
 
     async createTodo(req: Request, res: Response): Promise<void> {
@@ -27,9 +22,8 @@ export class TodoController {
             const { task, isHighPriority }: CreateTodoRequest = req.body;
             const savedTodo: Todo = await this._todoService.createTodo(task, isHighPriority);
             res.status(201).json(TodoDto.fromEntity(savedTodo));
-        } catch (error) {
-            GlobalExceptionHandler.handleException(error as Error, res);
-        }
+        } 
+        catch (error) { GlobalExceptionHandler.handleException(error as Error, res); }
     }
 
     async findTodoById(req: Request, res: Response): Promise<void> {
@@ -37,8 +31,17 @@ export class TodoController {
             const id: number = parseInt(req.params.id);
             const todo: Todo = await this._todoService.findTodoById(id);
             res.status(200).json(TodoDto.fromEntity(todo));
-        } catch(error) {
-            GlobalExceptionHandler.handleException(error as Error, res);
         }
+        catch(error) { GlobalExceptionHandler.handleException(error as Error, res); }
+    }
+
+    async updateTodoTask(req: Request, res: Response) {
+        try {
+            const id: number = parseInt(req.params.id);
+            const update: Partial<Todo> = req.body
+            const updatedTodo: Todo = await this._todoService.updateTodo(id, update);
+            res.status(200).json(TodoDto.fromEntity(updatedTodo));
+        } 
+        catch(error) { GlobalExceptionHandler.handleException(error as Error, res); }
     }
 }

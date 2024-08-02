@@ -1,7 +1,6 @@
 import { AppDataSource } from "../config/ormconfig";
 import { TodoCreateDto } from "../controller/dto/todo-create.dto";
 import { Todo } from "../entity/todo.entity";
-import { GetAllFetchException } from "../exception/get-all-fetch.exception";
 import { TodoNotFoundException } from "../exception/todo-not-found.exception";
 import { TodoRepository } from "../repository/todo.repository";
 import { TodoValidate } from "../validate/todo.validate";
@@ -14,10 +13,15 @@ export class TodoService {
             AppDataSource.getRepository(Todo) as TodoRepository;
     }
     
-    async getAll(): Promise<Todo[]> {
-        const todoList: Todo[] = await this._todoRepository.find();
-        if (!todoList) throw new GetAllFetchException();
-        return todoList;
+    async getAllTodos(): Promise<Todo[]> {
+        const todolist: Todo[] = await this._todoRepository.find({
+            order : {
+                isHighPriority: 'DESC',
+                createdAt: 'DESC'
+            }
+        });
+        TodoValidate.validateGetAllTodos(todolist)
+        return todolist;
     }
 
     async createTodo(task: string, isHighPriority: boolean): Promise<Todo> {
@@ -30,9 +34,18 @@ export class TodoService {
 
     async findTodoById(id: number): Promise<Todo> {
         TodoValidate.validadeFindTodoById(id);
-        const todo: Todo | null = await this._todoRepository.findOne({ where: { id } });
+        const todo: Todo | null = (
+            await this._todoRepository.findOne({ where: { id } })
+        );
         if (todo === null) throw new TodoNotFoundException();
         return todo;
+    }
+
+    async updateTodo(id: number, update: Partial<Todo>): Promise<Todo> {
+        TodoValidate.validadeUpdateTodo(update)
+        const todo = await this.findTodoById(id);
+        Object.assign(todo, update);
+        return await this._todoRepository.save(todo);
     }
 }
 
