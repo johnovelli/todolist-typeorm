@@ -64,7 +64,7 @@ describe('TodoService:', () => {
     it('Should create correctly new todo.', async () => {
       const mockTodo: Todo = { id: 1, task: 'Task 1', isHighPriority: true, isComplete: false, createdAt: new Date(), updatedAt: new Date() } as Todo;
       todoRepository.save.mockResolvedValue(mockTodo);
-      const todo = await todoService.createTodo("Task 1", true);
+      const todo = await todoService.createTodo("Task 1", 1 as any);
       expect(todo).toEqual(mockTodo);
     });
 
