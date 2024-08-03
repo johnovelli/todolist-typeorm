@@ -16,6 +16,7 @@ export class TodoValidate {
 
     static validateCreateTodo(task: string, isHighPriority: boolean): void {
         if (!task) throw new CreateTodoNullException();
+        if (!isHighPriority) throw new CreateTodoNullException();
         if (typeof task !== 'string' || typeof isHighPriority !== 'boolean') {
             throw new CreateTodoTypeException();
         }
@@ -27,11 +28,12 @@ export class TodoValidate {
     }
 
     static validadeUpdateTodo(update: Partial<Todo>): void {
-        const updates = ['task', 'isHighPriority', 'isComplete'];
+        const updatesFields = ['task', 'isHighPriority', 'isComplete'];
         const updateFields = Object.keys(update);
         if (updateFields.length !== 1) throw new UpdateTodoFieldException();
+
         const updateField = updateFields[0];
-        if (!updates.includes(updateField)) throw new UpdateTodoFieldNameException();
+        if (!updatesFields.includes(updateField)) throw new UpdateTodoFieldNameException();
         if (updateField === 'task' && typeof update[updateField] !== 'string') {
             throw new UpdateTodoFieldTypeException();
         }
@@ -44,17 +46,20 @@ export class TodoValidate {
 
     static validateGetFilteredTodos(filter: Partial<Todo>): 
     { filterField: string, fieldValue: boolean }{
-        const filters = ['isHighPriority', 'isComplete'];
+        const filtersFields = ['isHighPriority', 'isComplete'];
         const filterFields = Object.keys(filter);
         if (filterFields.length !== 1) throw new FilterTodoFieldException();
+
         const filterField: string = filterFields[0];
+        if (!filtersFields.includes(filterField)) throw new UpdateTodoFieldNameException();
+
         let fieldValue: boolean = false;
-        if (!filters.includes(filterField)) throw new UpdateTodoFieldNameException();
         if ( filterField === 'isHighPriority' || filterField === 'isComplete') {
             const value = filter[filterField]
             if (typeof value !== 'boolean') throw new FilterTodoFieldException();
             fieldValue = value;
         }
+
         return {filterField, fieldValue}
     }
 }
