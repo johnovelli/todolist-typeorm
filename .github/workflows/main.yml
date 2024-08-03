@@ -27,7 +27,7 @@ jobs:
 
       - name: Run Jest tests
         run: |
-          cd bac-kend
+          cd back-kend
           npm run test
         env:
           CI: true
