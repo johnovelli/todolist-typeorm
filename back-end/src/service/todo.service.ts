@@ -57,7 +57,7 @@ export class TodoService {
     }
 
     async updateTodo(id: number, update: Partial<Todo>): Promise<Todo> {
-        TodoValidate.validadeUpdateTodo(update);
+        TodoValidate.validateUpdateTodo(update);
         const todoToUpdate = await this.findTodoById(id);
         Object.assign(todoToUpdate, update);
         return await this._todoRepository.save(todoToUpdate);

@@ -25,7 +25,7 @@ export class TodoValidate {
         if(!id || typeof id !== 'number') throw new FindTodoTypeException();
     }
 
-    static validadeUpdateTodo(update: Partial<Todo>): void {
+    static validateUpdateTodo(update: Partial<Todo>): void {
         const updatesFields = ['task', 'isHighPriority', 'isComplete'];
         const updateFields = Object.keys(update);
         if (updateFields.length !== 1) throw new UpdateTodoFieldException();
