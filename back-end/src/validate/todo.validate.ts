@@ -15,12 +15,10 @@ export class TodoValidate {
     }
 
     static validateCreateTodo(task: string, isHighPriority: boolean): void {
-        if (!task) throw new CreateTodoNullException();
-        if (!isHighPriority) throw new CreateTodoNullException();
+        if (!task || isHighPriority === null) throw new CreateTodoNullException();
         if (typeof task !== 'string' || typeof isHighPriority !== 'boolean') {
             throw new CreateTodoTypeException();
         }
-        if (!task.trim()) throw new CreateTodoNullException();
     }
 
     static validadeFindTodoById(id: number): void {
