@@ -3,7 +3,7 @@ import { TodoCreateDto } from "../controller/dto/todo-create.dto";
 import { Todo } from "../entity/todo.entity";
 import { TodoNotFoundException } from "../exception/find/todo-not-found.exception";
 import { TodoRepository } from "../repository/todo.repository";
-import { TodoValidate } from "../validate/todo.validate";
+import { TodoValidate } from "../validate/todo.service.validate";
 
 
 export class TodoService {
