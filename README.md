@@ -1,0 +1,1 @@
+Aplicação verificada via Github Actions;
