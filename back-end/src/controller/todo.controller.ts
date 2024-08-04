@@ -8,7 +8,9 @@ import { TodoDto } from "./dto/todo.dto";
 
 export class TodoController {
     private _todoService: TodoService
-    constructor() { this._todoService = new TodoService(); }
+    constructor() { 
+        this._todoService = new TodoService(); 
+    }
 
     async getAllTodos(_req: Request, res: Response): Promise<void> {
         try {
@@ -32,7 +34,7 @@ export class TodoController {
             res.status(201).json(TodoDto.fromEntity(savedTodo));
         } 
         catch (error) { GlobalExceptionHandler.handleException(error as Error, res); }
-    }
+    };
 
     async findTodoById(req: Request, res: Response): Promise<void> {
         try {

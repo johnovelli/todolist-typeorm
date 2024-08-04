@@ -1,7 +1,7 @@
 import app from './app';
 import { AppDataSource } from './config/ormconfig';
 
-const PORT = 3000;
+const PORT = Number(process.env.APP_PORT);
 
 AppDataSource.initialize()
   .then(() => {

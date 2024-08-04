@@ -36,7 +36,7 @@ export class TodoValidate {
             throw new UpdateTodoFieldTypeException();
         }
         if ((
-            updateField=== 'isHighPriority' || updateField === 'isComplete'
+            updateField === 'isHighPriority' || updateField === 'isComplete'
         ) && typeof update[updateField] !== 'boolean'){
             throw new UpdateTodoFieldTypeException(); 
         }
@@ -44,20 +44,16 @@ export class TodoValidate {
 
     static validateGetFilteredTodos(filter: Partial<Todo>): 
     { filterField: string, fieldValue: boolean }{
-        const filtersFields = ['isHighPriority', 'isComplete'];
-        const filterFields = Object.keys(filter);
+        const filterFields = Object.keys(filter) as (keyof Todo)[];
         if (filterFields.length !== 1) throw new FilterTodoFieldException();
 
         const filterField: string = filterFields[0];
-        if (!filtersFields.includes(filterField)) throw new UpdateTodoFieldNameException();
-
-        let fieldValue: boolean = false;
-        if ( filterField === 'isHighPriority' || filterField === 'isComplete') {
-            const value = filter[filterField]
-            if (typeof value !== 'boolean') throw new FilterTodoFieldException();
-            fieldValue = value;
+        if (filterField === 'isHighPriority' || filterField === 'isComplete') {
+            const fieldValue = filter[filterField];
+            if (typeof fieldValue !== 'boolean') throw new FilterTodoFieldException();
+            return { filterField, fieldValue };
+        } else {
+            throw new FilterTodoFieldException();
         }
-
-        return {filterField, fieldValue}
     }
 }

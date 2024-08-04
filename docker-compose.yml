@@ -1,13 +1,15 @@
+version: '3.8'
+
 services:
   app:
     build: ./back-end
     ports:
-      - "3000:3000"
+      - "${APP_PORT}:${APP_PORT}"
     depends_on:
      db:
       condition: service_healthy
     env_file:
-      - ./back-end/.env
+      - ./.env
     volumes:
       - ./back-end/src:/usr/src/app/src
       - /usr/src/app/node_modules
@@ -15,10 +17,10 @@ services:
   db:
     image: mysql:8.0.32
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: todolist_db
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
     ports:
-      - "3306:3306"
+      - "${DB_PORT}:${DB_PORT}"
     volumes:
       - db_data:/var/lib/mysql
     healthcheck:
