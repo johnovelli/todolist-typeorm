@@ -1,3 +1,24 @@
-back-end/node_modules/
+# Node modules
+back-end/node_modules
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Cache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp.*
+.cache/
+
+# Environment files
 .env
+
+# Coverage reports
 back-end/coverage/
+
+# OS-specific files
+.DS_Store
+Thumbs.db

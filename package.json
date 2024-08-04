@@ -3,6 +3,6 @@
     "version": "1.0.0",
     "scripts": {
         "install": "npm run install:backend",
-        "install:backend": "cd backend && npm install"
+        "install:backend": "cd back-end && npm install"
     }
 }
