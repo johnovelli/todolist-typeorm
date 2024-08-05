@@ -8,6 +8,10 @@ const config: Config.InitialOptions = {
   transform: {
     '^.+\\.ts$': 'ts-jest',
   },
+  coveragePathIgnorePatterns: [
+    '/node_modules/',
+    '/config/'
+  ],
 };
 
 export default config;

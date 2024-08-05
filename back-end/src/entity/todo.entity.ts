@@ -14,21 +14,15 @@ export class Todo {
   @Column({ default: false })
   isComplete!: boolean;
 
-  @CreateDateColumn(
-    { type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" }
-  )
+  @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   createdAt!: Date;
 
-  @UpdateDateColumn(
-    { type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" }
-  )
+  @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
   updatedAt!: Date;
 
-  constructor(task: string);
-  constructor(task: string, isHighPriority: boolean);
-  constructor(task: string, isHighPriority?: boolean) {
-    this.task = task;
-    this.isHighPriority = isHighPriority ?? false;
+  constructor(task: string, isHighPriority: boolean = false) {
+    this.task! = task;
+    this.isHighPriority! = isHighPriority;
   }
 }
 
