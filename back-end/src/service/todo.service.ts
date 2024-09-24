@@ -1,9 +1,9 @@
-import { AppDataSource } from "../config/ormconfig";
-import { TodoCreateDto } from "../controller/dto/todo-create.dto";
-import { Todo } from "../entity/todo.entity";
-import { TodoNotFoundException } from "../exception/find/todo-not-found.exception";
-import { TodoRepository } from "../repository/todo.repository";
-import { TodoValidate } from "../validate/todo.service.validate";
+import { AppDataSource } from '../config/ormconfig';
+import { TodoCreateDto } from '../controller/dto/todo-create.dto';
+import { Todo } from '../entity/todo.entity';
+import { TodoNotFoundException } from '../exception/find/todo-not-found.exception';
+import { TodoRepository } from '../repository/todo.repository';
+import { TodoValidate } from '../validate/todo.service.validate';
 
 
 export class TodoService {
@@ -26,17 +26,14 @@ export class TodoService {
     }
 
     async getAllFilteredTodos (filter: Partial<Todo>): Promise<Todo[]> {
-        const filterParams = TodoValidate.validateGetFilteredTodos(filter);
-        const filteredTodos: Todo[] = await this._todoRepository.find({
-            where: {
-                [filterParams.filterField]: filterParams.fieldValue,
-            },
+        const { filterField, fieldValue } = TodoValidate.validateGetFilteredTodos(filter);
+        return await this._todoRepository.find({
+            where: { [filterField]: fieldValue },
             order: {
                 updatedAt: 'DESC',
                 createdAt: 'DESC',
             }
         });
-        return filteredTodos;
     }
 
     async createTodo(task: string, isHighPriority: boolean): Promise<Todo> {
@@ -49,10 +46,8 @@ export class TodoService {
 
     async findTodoById(id: number): Promise<Todo> {
         TodoValidate.validadeFindTodoById(id);
-        const todo: Todo | null = (
-            await this._todoRepository.findOne({ where: { id } })
-        );
-        if (todo === null) throw new TodoNotFoundException();
+        const todo = await this._todoRepository.findOne({ where: { id } });
+        if (!todo) throw new TodoNotFoundException();
         return todo;
     }
 
@@ -69,5 +64,3 @@ export class TodoService {
         return `Task: ${todoToDelete.task} removed from db.`;
     }
 }
-
-    

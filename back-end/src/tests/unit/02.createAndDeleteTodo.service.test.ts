@@ -1,14 +1,15 @@
-import { EntityManager } from "typeorm";
+import { EntityManager, DeleteResult } from "typeorm";
 import { MongoQueryRunner } from "typeorm/driver/mongodb/MongoQueryRunner";
 import { Todo } from "../../entity/todo.entity";
 import { CreateTodoNullException } from "../../exception/create/create-todo-null.exception";
 import { CreateTodoTypeException } from "../../exception/create/create-todo-type.exception";
 import { TodoRepository } from "../../repository/todo.repository";
 import { TodoService } from "../../service/todo.service";
+import {TodoNotFoundException} from "../../exception/find/todo-not-found.exception";
 
 jest.mock('../../repository/todo.repository');
 
-describe('TodoService - createTodo:', () => {
+describe('TodoService - createTodo and deleteTodo:', () => {
   let todoService: TodoService;
   let todoRepository: jest.Mocked<TodoRepository>;
 
@@ -45,5 +46,19 @@ describe('TodoService - createTodo:', () => {
 
   it('Should throw CreateTodoTypeException if isHighPriority is not a boolean.', async () => {
     await expect(todoService.createTodo("task", 1 as any)).rejects.toThrow(CreateTodoTypeException);
+  });
+
+
+  it('Should delete a todo and return a confirmation message.', async () => {
+    const mockTodo: Todo = { id: 1, task: 'Task 1', isHighPriority: true, isComplete: false, createdAt: new Date(), updatedAt: new Date() } as Todo;
+    todoRepository.findOne.mockResolvedValue(mockTodo);
+    todoRepository.delete.mockResolvedValue({ affected: 1 } as DeleteResult);
+    const result = await todoService.deleteTodo(1);
+    expect(result).toEqual(`Task: ${mockTodo.task} removed from db.`);
+  });
+
+  it('Should throw TodoNotFoundException if todo with given id does not exist.', async () => {
+    todoRepository.findOne.mockResolvedValue(null);
+    await expect(todoService.findTodoById(99)).rejects.toThrow(TodoNotFoundException);
   });
 });

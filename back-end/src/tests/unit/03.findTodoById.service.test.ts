@@ -23,7 +23,7 @@ describe('TodoService - findTodoById:', () => {
   it('Should find todo by id correctly.', async () => {
     const mockTodo: Todo = { id: 1, task: 'Task 1', isHighPriority: true, isComplete: false, createdAt: new Date(), updatedAt: new Date() } as Todo;
     todoRepository.findOne.mockResolvedValue(mockTodo);
-    const todo = await todoService.findTodoById(1);
+    const todo = await todoService.findTodoById(mockTodo.id);
     expect(todo).toEqual(mockTodo);
   });
 
